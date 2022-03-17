@@ -1,0 +1,18 @@
+name: "BI Layer - YAML Validation Check"
+description: "BI Layer - YAML Validation Check"
+author: "terekete"
+
+inputs:
+  resource_path:
+    description: "Path to YAML file(s) to be validated"
+    required: true
+
+runs:
+  using: "docker"
+  image: "docker://ghcr.io/terekete/bilayer-yaml-validation/bilayer-yaml-validation"
+  args:
+    - ${{ inputs.resource_path }}
+
+branding:
+  color: purple
+  icon: check-circle
