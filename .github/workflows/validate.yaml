@@ -12,4 +12,4 @@ jobs:
           ls -la
       - uses: terekete/bilayer-yaml-validation@main
         with:
-          resource_path: test
+          resource_path: tests
