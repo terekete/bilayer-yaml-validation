@@ -1,0 +1,44 @@
+kind: scheduled_query
+version: v1
+metadata:
+  dep: "144"
+description: "Table for testing"
+resource_name: bq_query_scheduled_1
+dataset_id: mango
+expiration_datetime_staging: datetime(2022,12,25)
+expiration_datetime_serving:
+query_schedule: "every 24 hours"
+write_disposition: "WRITE_APPEND"
+query: >
+  with cte as (
+  select * from mango.bq_audit_run_express
+  )
+  select * from cte
+schema: >
+  [
+    {
+      "name": "run_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "run_id"
+    },
+    {
+      "name": "run_ts",
+      "type": "DATETIME",
+      "mode": "NULLABLE",
+      "description": "run_ts"
+    }
+  ]
+iam_binding:
+  users:
+    subscribers:
+      - principal: user:dong.yang@telus.com
+        expiry: datetime(2020,10,25)
+      - principal: user:mark.gates@telus.com
+        expiry: datetime(2022,12,25)
+    publishers:
+      - principal: user:mark.gates@telus.com
+        expiry: datetime(2022,12,25)
+  service_accounts:
+    subscribers:
+    publishers:

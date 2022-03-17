@@ -1,0 +1,39 @@
+kind: table
+version: v1
+metadata:
+  dep: "144"
+description: "Table for testing "
+resource_name: bq_audit_run_express
+dataset_id: mango
+expiration_datetime_staging: datetime(2022,12,25)
+expiration_datetime_serving:
+schema: >
+  [
+    {
+      "name": "run_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "run_id"
+    },
+    {
+      "name": "run_ts",
+      "type": "DATETIME",
+      "mode": "NULLABLE",
+      "description": "run_ts"
+    }
+  ]
+iam_binding:
+  users:
+    subscribers:
+      - principal: user:user1@telus.com
+        expiry: datetime(2020,10,25)
+      - principal: user:user2@telus.com
+        expiry: datetime(2022,12,25)
+    publishers:
+      - principal: user:user1@telus.com
+        expiry: datetime(2020,10,25)
+      - principal: user:user2@telus.com
+        expiry: datetime(2022,12,25)
+  service_accounts:
+    subscribers:
+    publishers:

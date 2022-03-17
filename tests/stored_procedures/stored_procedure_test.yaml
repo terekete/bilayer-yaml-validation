@@ -1,0 +1,14 @@
+kind: stored_procedure
+version: v1
+metadata:
+  dep: "144"
+description: "stored_procedures"
+resource_name: bq_test_stored_procedure
+dataset_id: mango
+expiration_datetime_staging: datetime(2022,12,25)
+expiration_datetime_serving:
+definition_body: >
+    BEGIN
+    INSERT mango.bq_audit_run_express (run_id) VALUES("io");
+    END;
+query_schedule: every 24 hours

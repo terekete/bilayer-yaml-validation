@@ -1,0 +1,33 @@
+kind: ext_table
+version: v1
+metadata:
+  dep: "144"
+description: "ext table"
+resource_name: bq_exttable_1
+dataset_id: pdc_2
+expiration_datetime_staging: datetime(2022,12,25)
+expiration_datetime_serving:
+source_format: "CSV"
+autodetect: True
+source_uris_staging:
+  # - "gs://dse-cicd-test-lab-4c0841-jobs-scripts/userdata1.avro"
+  - "gs://dse-cicd-test-lab-4c0841-jobs-scripts/loan*"
+source_uris_serving:
+  - "gs://dse-cicd-test-lab-4c0841-jobs-scripts/loan*"
+schema:
+csv_options:
+  quote: ""
+  allow_jagged_rows: True
+  allow_quoted_newlines: False
+  encoding: "UTF-8"
+  field_delimiter: ","
+  skip_leading_rows: 1
+iam_binding:
+  users:
+    subscribers:
+      - principal: user:user1@telus.com
+        expiry: datetime(2020,10,25)
+      - principal: user:user2@telus.com
+        expiry: datetime(2022,12,25)
+  service_accounts:
+    subscribers:

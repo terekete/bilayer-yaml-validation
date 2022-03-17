@@ -1,0 +1,22 @@
+kind: bucket
+version: v1
+metadata:
+  dep: "12"
+resource_name: "bucket_fruit"
+storage_class: "STANDARD"
+lifecycle_age_days: 90
+iam_binding:
+  users:
+    subscribers:
+      - principal: user:user1@telus.com
+        expiry: datetime(2020,10,25)
+      - principal: user:user2@telus.com
+        expiry: datetime(2022,12,25)
+    publishers:
+      - principal: user:user1@telus.com
+        expiry: datetime(2020,10,25)
+      - principal: user:user2@telus.com
+        expiry: datetime(2022,12,25)
+  service_accounts:
+    subscribers:
+    publishers:

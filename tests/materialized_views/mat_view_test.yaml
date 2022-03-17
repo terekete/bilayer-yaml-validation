@@ -1,0 +1,22 @@
+kind: materialized_view
+version: v1
+metadata:
+  dep: "144"
+description: "Mat. View for Testing"
+resource_name: bq_material_run_view
+dataset_id: mat_view_1
+expiration_datetime_staging: datetime(2022,12,25)
+expiration_datetime_serving:
+params:
+  query: "select * from `source_data.data`"
+  refresh: true
+  refresh_ms: 60000
+iam_binding:
+  users:
+    subscribers:
+      - principal: user:user1@telus.com
+        expiry: datetime(2020,10,25)
+      - principal: user:user2@telus.com
+        expiry: datetime(2022,12,25)
+  service_accounts:
+    subscribers:
