@@ -52,11 +52,12 @@ def process(manifest_path, schema_path):
 
 def get_paths(path):
     tp_list = [
-        (os.path.basename(os.path.normpath(root)), root + "/" + file)
+        (os.path.basename(os.path.normpath(root)), root + "/" + file, root)
         for root, subdirs, files in os.walk(path)
         for file in files
         if file.endswith(".yaml") or file.endswith(".yml")
     ]
+    print(tp_list)
     return tp_list
 
 
@@ -71,7 +72,8 @@ def main():
     )
     args = parser.parse_args()
     resource_path = args.resource_path
-    for type, path in get_paths(resource_path):
+    for type, path, root in get_paths(resource_path):
+        print((type, path, root))
         if type == "buckets":
             process(path, os.getcwd() + "/schemas/bucket.py")
         elif type == "datasets":
@@ -84,8 +86,10 @@ def main():
             process(path, os.getcwd() + "/schemas/scheduled_query.py")
         elif type == "stored_procedures":
             process(path, os.getcwd() + "/schemas/stored_procedure.py")
-        elif type == "spark_jobs":
+        elif type == "spark_jobs" or "spark_jobs" in root:
             process(path, os.getcwd() + "/schemas/spark_job.py")
+        elif type == "vertex_pipelines" or "vertex_pipelines" in root:
+            process(path, os.getcwd() + "/schemas/vertex_pipelines.py")
         elif type == "tables":
             process(path, os.getcwd() + "/schemas/table.py")
         elif type == "views":
