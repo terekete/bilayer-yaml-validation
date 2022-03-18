@@ -49,61 +49,61 @@ def process(manifest_path):
         validate_manifest(
             file_handler,
             manifest_path,
-            os.getcwd() + 'main/schemas/dataset.py'
+            os.getcwd() + '/main/schemas/dataset.py'
         )
     elif file_handler["kind"] == 'table':
         validate_manifest(
             file_handler,
             manifest_path,
-            os.getcwd() + 'main/schemas/table.py'
+            os.getcwd() + '/main/schemas/table.py'
         )
     elif file_handler["kind"] == 'view':
         validate_manifest(
             file_handler,
             manifest_path,
-            os.getcwd() + 'main/schemas/view.py'
+            os.getcwd() + '/main/schemas/view.py'
         )
     elif file_handler["kind"] == 'materialized_view':
         validate_manifest(
             file_handler,
             manifest_path,
-            os.getcwd() + 'main/schemas/mat_view.py'
+            os.getcwd() + '/main/schemas/mat_view.py'
         )
     elif file_handler["kind"] == 'stored_procedure':
         validate_manifest(
             file_handler,
             manifest_path,
-            os.getcwd() + 'main/schemas/stored_procedure.py'
+            os.getcwd() + '/main/schemas/stored_procedure.py'
         )
     elif file_handler["kind"] == 'spark_job':
         validate_manifest(
             file_handler,
             manifest_path,
-            os.getcwd() + 'main/schemas/spark_job.py'
+            os.getcwd() + '/main/schemas/spark_job.py'
         )
     elif file_handler["kind"] == 'vertex_pipeline':
         validate_manifest(
             file_handler,
             manifest_path,
-            os.getcwd() + 'main/schemas/vertex_pipeline.py'
+            os.getcwd() + '/main/schemas/vertex_pipeline.py'
         )
     elif file_handler["kind"] == 'bucket':
         validate_manifest(
             file_handler,
             manifest_path,
-            os.getcwd() + 'main/schemas/bucket.py'
+            os.getcwd() + '/main/schemas/bucket.py'
         )
     elif file_handler["kind"] == 'ext_table':
         validate_manifest(
             file_handler,
             manifest_path,
-            os.getcwd() + 'main/schemas/ext_table.py'
+            os.getcwd() + '/main/schemas/ext_table.py'
         )
     elif file_handler["kind"] == 'scheduled_query':
         validate_manifest(
             file_handler,
             manifest_path,
-            os.getcwd() + 'main/schemas/scheduled_query.py'
+            os.getcwd() + '/main/schemas/scheduled_query.py'
         )
     else:
         logging.error(
