@@ -107,7 +107,7 @@ def process(manifest_path):
         )
     else:
         logging.error(
-            "#### Unknown manifest kind: {manifest_path}"
+            "*\t Error: Unknown manifest kind: {manifest_path}"
             .format(manifest_path=manifest_path)
         )
 
@@ -138,7 +138,7 @@ def main():
             process(path)
         else:
             logging.error(
-                "Unidentified resource path - {path}".format(path=path))
+                "*\t Eror: Unidentified resource path - {path}".format(path=path))
 
 
 if __name__ == "__main__":
