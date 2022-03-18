@@ -1,12 +1,19 @@
 name: validate_yamls
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        with:
+          repository: terekete/bilayer-yaml-validation
+          path: main
+      - name: ls_log
+        run: |
+          ls -la
       - uses: terekete/bilayer-yaml-validation@main
         with:
-          resource_path: tests
+          resource_path: main/resources
