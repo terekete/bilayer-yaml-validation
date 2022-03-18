@@ -7,9 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: ls_log
-        run: |
-          ls -la
       - uses: terekete/bilayer-yaml-validation@main
         with:
           resource_path: tests
