@@ -48,7 +48,8 @@
     'schedule': {
         'required': True,
         'type': 'string',
-        'nullable': False
+        'nullable': False,
+        'regex': '(((\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*) ?){5,7}'
     },
     'input_arg_staging': {
         'required': True,

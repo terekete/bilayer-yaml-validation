@@ -6,7 +6,7 @@ resource_name: vertex_1
 description: "jobz"
 expiration_datetime_staging: datetime(2022,5,5)
 expiration_datetime_serving: datetime(2022,5,5)
-schedule: "0 0 1 * *"
+schedule: "* * * * *"
 input_arg_staging:
   gcs_csv_path: gs://bi-stg-jackfruit-pr/data/california_housing_train.csv
 input_arg_serving:

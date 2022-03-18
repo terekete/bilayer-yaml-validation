@@ -37,7 +37,12 @@
         "nullable": False,
         "regex": "datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)",
     },
-    "schedule": {"required": True, "type": "string", "nullable": False},
+    "schedule": {
+        "required": True,
+        "type": "string",
+        "nullable": False,
+        "regex": "(((\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*) ?){5,7}"
+    },
     "custom_image_path": {"required": False, "type": "string", "nullable": True},
     "iam_binding": {
         "required": True,

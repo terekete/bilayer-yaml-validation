@@ -14,14 +14,14 @@ def validate_manifest(manifest: str, manifest_path: str, schema_path: str):
     validator = Validator(schema)
     if validator.validate(manifest):
         logging.info(
-            "✅\t#### Schema Validation Successful for kind: {kind} - {resource}".format(
-                kind=manifest["kind"], resource=manifest["resource_name"].lower()
+            "✅\t Schema Validation Successful for kind: {kind} - {manifest_path}".format(
+                kind=manifest["kind"], manifest_path=manifest_path
             )
         )
         return
     else:
         logging.error(
-            "#### Schema Validation Failed for kind: {kind} - {resource}".format(
+            "*\t Schema Validation Failed for kind: {kind} - {resource}".format(
                 kind=manifest["kind"], resource=manifest["resource_name"].lower()
             )
         )
@@ -32,32 +32,93 @@ def validate_manifest(manifest: str, manifest_path: str, schema_path: str):
 
 
 # Function to validate if the manifest is null
-def validate_manifest_null(manifest: str):
+def validate_manifest_null(manifest: str, manifest_path: str):
     if manifest is None:
         logging.error(
-            "#### YAML Resource Definition is Incomplete - {manifest}".format(
-                manifest)
+            "*\t Error: YAML Resource is Empty or Does Not Exist  - {manifest_path}"
+            .format(manifest_path=manifest_path)
         )
         sys.exit(1)
 
 
-def process(manifest_path, schema_path):
+def process(manifest_path):
     with open(str(manifest_path)) as yaml_file:
         file_handler = yaml.load(yaml_file, Loader=yaml.FullLoader)
-    validate_manifest_null(file_handler)
-    validate_manifest(
-        manifest=file_handler, manifest_path=manifest_path, schema_path=schema_path
-    )
+    validate_manifest_null(file_handler, manifest_path)
+    if file_handler["kind"] == 'dataset':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/schemas/dataset.py'
+        )
+    elif file_handler["kind"] == 'table':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/schemas/table.py'
+        )
+    elif file_handler["kind"] == 'view':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/schemas/view.py'
+        )
+    elif file_handler["kind"] == 'materialized_view':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/schemas/mat_view.py'
+        )
+    elif file_handler["kind"] == 'stored_procedure':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/schemas/stored_procedure.py'
+        )
+    elif file_handler["kind"] == 'spark_job':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/schemas/spark_job.py'
+        )
+    elif file_handler["kind"] == 'vertex_pipeline':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/schemas/vertex_pipeline.py'
+        )
+    elif file_handler["kind"] == 'bucket':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/schemas/bucket.py'
+        )
+    elif file_handler["kind"] == 'ext_table':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/schemas/ext_table.py'
+        )
+    elif file_handler["kind"] == 'scheduled_query':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/schemas/scheduled_query.py'
+        )
+    else:
+        logging.error(
+            "#### Unknown manifest kind: {manifest_path}"
+            .format(manifest_path=manifest_path)
+        )
 
 
 def get_paths(path):
     tp_list = [
-        (os.path.basename(os.path.normpath(root)), root + "/" + file, root)
+        root + "/" + file
         for root, subdirs, files in os.walk(path)
         for file in files
         if file.endswith(".yaml") or file.endswith(".yml")
     ]
-    print(tp_list)
     return tp_list
 
 
@@ -72,31 +133,12 @@ def main():
     )
     args = parser.parse_args()
     resource_path = args.resource_path
-    for type, path, root in get_paths(resource_path):
-        print((type, path, root))
-        if type == "buckets":
-            process(path, os.getcwd() + "/schemas/bucket.py")
-        elif type == "datasets":
-            process(path, os.getcwd() + "/schemas/dataset.py")
-        elif type == "external_tables":
-            process(path, os.getcwd() + "/schemas/ext_table.py")
-        elif type == "materialized_views":
-            process(path, os.getcwd() + "/schemas/mat_view.py")
-        elif type == "scheduled_queries":
-            process(path, os.getcwd() + "/schemas/scheduled_query.py")
-        elif type == "stored_procedures":
-            process(path, os.getcwd() + "/schemas/stored_procedure.py")
-        elif type == "spark_jobs" or "spark_jobs" in root:
-            process(path, os.getcwd() + "/schemas/spark_job.py")
-        elif type == "vertex_pipelines" or "vertex_pipelines" in root:
-            process(path, os.getcwd() + "/schemas/vertex_pipelines.py")
-        elif type == "tables":
-            process(path, os.getcwd() + "/schemas/table.py")
-        elif type == "views":
-            process(path, os.getcwd() + "/schemas/view.py")
+    for path in get_paths(resource_path):
+        if path:
+            process(path)
         else:
             logging.error(
-                "Unidentified resource definition - {path}".format(path=path))
+                "Unidentified resource path - {path}".format(path=path))
 
 
 if __name__ == "__main__":

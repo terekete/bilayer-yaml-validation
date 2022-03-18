@@ -2,7 +2,7 @@ kind: spark_job
 version: v1
 metadata:
   dep: "12"
-resource_name: pyspark_1
+resource_name: pyspark_test2
 description: "jobz"
 expiration_datetime_staging: datetime(2022,12,5)
 expiration_datetime_serving: datetime(2022,12,5)
