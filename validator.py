@@ -105,6 +105,12 @@ def process(manifest_path):
             manifest_path,
             os.getcwd() + '/main/schemas/scheduled_query.py'
         )
+    elif file_handler["kind"] == 'scalar_function':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/main/schemas/scalar_function.py'
+        )
     else:
         logging.error(
             "*\t Error: Unknown manifest kind: {manifest_path}"
