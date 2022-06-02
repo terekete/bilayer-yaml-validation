@@ -26,7 +26,7 @@
         'required': True,
         'type': 'string',
         'nullable': False,
-        'regex': '([a-z])([a-z0-9_])+'
+        'regex': 'vp_[a-z0-9_]+'
     },
     'description': {
         'required': False,
@@ -48,8 +48,7 @@
     'schedule': {
         'required': True,
         'type': 'string',
-        'nullable': False,
-        'regex': '(((\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*) ?){5,7}'
+        'nullable': False
     },
     'input_arg_staging': {
         'required': True,

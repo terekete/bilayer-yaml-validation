@@ -3,7 +3,7 @@
         'required': True,
         'type': 'string',
         'nullable': False,
-        'regex': '^view$'
+        'regex': '^binding$'
     },
     'version': {
         'required': True,
@@ -22,43 +22,32 @@
             }
         }
     },
-    'description': {
-        'required': True,
-        'type': 'string',
-        'nullable': False
-    },
     'resource_name': {
         'required': True,
         'type': 'string',
         'nullable': False,
-        'regex': 'bq_[a-z0-9_]+_view'
+        'regex': '[a-z0-9_]+'
     },
-    'dataset_id': {
+    'if_in_state': {
         'required': True,
-        'type': 'string',
-        'nullable': False
+        'type': 'boolean',
+        'nullable': False,
     },
-    'expiration_datetime_staging': {
+    'binding_type': {
         'required': True,
         'type': 'string',
         'nullable': False,
-        'regex': 'datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)'
+        'allowed': ["bq_table"]
     },
-    'expiration_datetime_serving': {
-        'required': True,
-        'type': 'string',
-        'nullable': True,
-        'regex': 'datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)'
-    },
-    'query': {
+    'binding_dataset_id': {
         'required': True,
         'type': 'string',
         'nullable': False
     },
-    'use_legacy_sql': {
-        'required': False,
-        'type': 'boolean',
-        'nullable': True
+    'binding_table_id': {
+        'required': True,
+        'type': 'string',
+        'nullable': False
     },
     'iam_binding': {
         'required': True,
@@ -69,6 +58,16 @@
                 'type': 'dict',
                 'schema': {
                     'subscribers': {
+                        'required': True,
+                        'type': 'list',
+                        'nullable': True,
+                        'schema': {'type': 'dict',
+                                   'schema': {
+                                       'principal': {'type': 'string', 'regex': '^(user:)([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+)\.([a-zA-Z0-9-.]+)$'},
+                                       'expiry': {'type': 'string', 'regex': 'datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)'}}
+                                   }
+                    },
+                    'publishers': {
                         'required': True,
                         'type': 'list',
                         'nullable': True,
@@ -105,9 +104,23 @@
                                 }
                             }
                         }
-                    }
+                    },
+                    'publishers': {
+                        'required': True,
+                        'type': 'list',
+                        'nullable': True,
+                        'schema': {
+                            'type': 'dict',
+                            'schema': {
+                                'principal': {
+                                    'type': 'string',
+                                    'regex': '^(serviceAccount:)([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+)\.([a-zA-Z0-9-.]+)$'
+                                }
+                            }
+                        }
+                    },
                 }
             }
         }
-    }
+    },
 }

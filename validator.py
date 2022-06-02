@@ -111,6 +111,30 @@ def process(manifest_path):
             manifest_path,
             os.getcwd() + '/main/schemas/scalar_function.py'
         )
+    elif file_handler["kind"] == 'audit':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/main/schemas/audit.py'
+        )
+    elif file_handler["kind"] == 'binding':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/main/schemas/binding.py'
+        )
+    elif file_handler["kind"] == 'expectation':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/main/schemas/expectation.py'
+        )
+    elif file_handler["kind"] == 'service_account':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/main/schemas/service_account.py'
+        )
     else:
         logging.error(
             "*\t Error: Unknown manifest kind: {manifest_path}"

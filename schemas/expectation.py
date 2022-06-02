@@ -3,7 +3,7 @@
         'required': True,
         'type': 'string',
         'nullable': False,
-        'regex': '^stored_procedure$'
+        'regex': '^expectation$'
     },
     'version': {
         'required': True,
@@ -31,9 +31,14 @@
         'required': True,
         'type': 'string',
         'nullable': False,
-        'regex': 'bq_[a-z0-9_]+'
+        'regex': '[a-z0-9_]+'
     },
     'dataset_id': {
+        'required': True,
+        'type': 'string',
+        'nullable': False
+    },
+    'table_id': {
         'required': True,
         'type': 'string',
         'nullable': False
@@ -50,36 +55,14 @@
         'nullable': True,
         'regex': 'datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)'
     },
-    'stored_procedure_parameters': {
-        'required': False,
-        'type': 'list',
-        'nullable': False,
-        'excludes': 'query_schedule',
-        'schema': {
-            'type': 'dict',
-            'schema': {
-                'name': {
-                    'type': 'string'
-                },
-                'data_type': {
-                    'type': 'string'
-                },
-                'mode': {
-                    'type': 'string',
-                    'allowed': ['IN','OUT','INOUT']
-                },
-            }
-        }
-    },
-    'definition_body': {
+    'data_validation': {
         'required': True,
-        'type': 'string',
-        'nullable': False
-    },
-    'query_schedule': {
-        'required': False,
-        'type': 'string',
-        'nullable': True,
-        'excludes': 'stored_procedure_parameters'
-    },
+        'type': 'dict',
+        'schema': {
+            'query': {'type': 'string'},
+            'schedule': {'type': 'string'},
+            'gchat_webhook_list': {'type': 'list'},
+            'properties': {'type': 'dict'}
+        }
+        }
 }
