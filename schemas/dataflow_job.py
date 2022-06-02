@@ -3,7 +3,7 @@
         'required': True,
         'type': 'string',
         'nullable': False,
-        'regex': '^view$'
+        'regex': '^dataflow_job$'
     },
     'version': {
         'required': True,
@@ -19,24 +19,19 @@
                 'required': True,
                 'type': 'string',
                 'nullable': False
-            }
+            },
         }
-    },
-    'description': {
-        'required': True,
-        'type': 'string',
-        'nullable': False
     },
     'resource_name': {
         'required': True,
         'type': 'string',
         'nullable': False,
-        'regex': 'bq_[a-z0-9_]+_view'
+        'regex': '([a-z])([a-z0-9_])+'
     },
-    'dataset_id': {
-        'required': True,
+    'description': {
+        'required': False,
         'type': 'string',
-        'nullable': False
+        'nullable': True
     },
     'expiration_datetime_staging': {
         'required': True,
@@ -47,17 +42,32 @@
     'expiration_datetime_serving': {
         'required': True,
         'type': 'string',
-        'nullable': True,
+        'nullable': False,
         'regex': 'datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)'
     },
-    'query': {
+    'image_path': {
         'required': True,
         'type': 'string',
         'nullable': False
     },
-    'use_legacy_sql': {
-        'required': False,
-        'type': 'boolean',
+    'job_name': {
+        'required': True,
+        'type': 'string',
+        'nullable': False
+    },
+    'schedule': {
+        'required': True,
+        'type': 'string',
+        'nullable': False
+    },
+    'input_arg_staging': {
+        'required': True,
+        'type': 'dict',
+        'nullable': True
+    },
+    'input_arg_serving': {
+        'required': True,
+        'type': 'dict',
         'nullable': True
     },
     'iam_binding': {
@@ -85,7 +95,7 @@
                                 }
                             }
                         }
-                    }
+                    },
                 }
             },
             'service_accounts': {
@@ -97,15 +107,14 @@
                         'type': 'list',
                         'nullable': True,
                         'schema': {
-                            'type': 'dict',
-                            'schema': {
+                            'type': 'dict', 'schema': {
                                 'principal': {
                                     'type': 'string',
                                     'regex': '^(serviceAccount:)([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+)\.([a-zA-Z0-9-.]+)$'
                                 }
                             }
                         }
-                    }
+                    },
                 }
             }
         }

@@ -1,135 +1,150 @@
 {
-    "kind": {
-        "required": True,
-        "type": "string",
-        "nullable": False,
-        "regex": "^ext_table$",
+    'kind': {
+        'required': True,
+        'type': 'string',
+        'nullable': False,
+        'regex': '^ext_table$'
     },
-    "version": {
-        "required": True,
-        "type": "string",
-        "nullable": False,
-        "regex": "v(\d{1})",
+    'version': {
+        'required': True,
+        'type': 'string',
+        'nullable': False,
+        'regex': 'v(\d{1})',
     },
-    "metadata": {
-        "required": True,
-        "type": "dict",
-        "schema": {"dep": {"required": True, "type": "string", "nullable": False}},
+    'metadata': {
+        'required': True,
+        'type': 'dict',
+        'schema': {
+            'dep': {
+                'required': True,
+                'type': 'string',
+                'nullable': False
+            }
+        }
     },
-    "description": {"required": True, "type": "string", "nullable": False},
-    "resource_name": {
-        "required": True,
-        "type": "string",
-        "nullable": False,
-        "regex": "bq_[a-z0-9_]+",
+    'description': {
+        'required': True,
+        'type': 'string',
+        'nullable': False
     },
-    "dataset_id": {"required": True, "type": "string", "nullable": False},
-    "expiration_datetime_staging": {
-        "required": True,
-        "type": "string",
-        "nullable": False,
-        "regex": "datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)",
+    'resource_name': {
+        'required': True,
+        'type': 'string',
+        'nullable': False,
+        'regex': 'bq_[a-z0-9_]+'
     },
-    "expiration_datetime_serving": {
-        "required": True,
-        "type": "string",
-        "nullable": True,
-        "regex": "datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)",
+    'dataset_id': {
+        'required': True,
+        'type': 'string',
+        'nullable': False
     },
-    "source_format": {
-        "required": True,
-        "type": "string",
-        "nullable": False,
-        "allowed": ["CSV", "NEWLINE_DELIMITED_JSON", "AVRO", "PARQUET", "ORC"],
+    'expiration_datetime_staging': {
+        'required': True,
+        'type': 'string',
+        'nullable': False,
+        'regex': 'datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)'
     },
-    "autodetect": {
-        "required": True,
-        "type": "boolean",
-        "nullable": False,
+    'expiration_datetime_serving': {
+        'required': True,
+        'type': 'string',
+        'nullable': True,
+        'regex': 'datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)'
     },
-    "source_uris_staging": {
-        "required": True,
-        "type": "list",
-        "nullable": False,
+    'source_format': {
+        'required': True,
+        'type': 'string',
+        'nullable': False,
+        'allowed': ["CSV", "NEWLINE_DELIMITED_JSON", "AVRO", "PARQUET", "ORC"]
     },
-    "source_uris_serving": {
-        "required": True,
-        "type": "list",
-        "nullable": False,
+    'autodetect': {
+        'required': True,
+        'type': 'boolean',
+        'nullable': False,
     },
-    "schema": {"required": True, "type": "string", "nullable": True},
-    "csv_options": {
-        "required": True,
-        "type": "dict",
-        "schema": {
-            "quote": {"required": True, "type": "string", "nullable": True},
-            "allow_jagged_rows": {
-                "required": True,
-                "type": "boolean",
-                "nullable": True,
-            },
-            "allow_quoted_newlines": {
-                "required": True,
-                "type": "boolean",
-                "nullable": True,
-            },
-            "encoding": {"required": True, "type": "string", "nullable": True},
-            "field_delimiter": {"required": True, "type": "string", "nullable": True},
-            "skip_leading_rows": {
-                "required": True,
-                "type": "integer",
-                "nullable": True,
-            },
-        },
+    'source_uris_staging': {
+        'required': True,
+        'type': 'list',
+        'nullable': False,
     },
-    "iam_binding": {
-        "required": True,
-        "type": "dict",
-        "schema": {
-            "users": {
-                "required": True,
-                "type": "dict",
-                "schema": {
-                    "subscribers": {
-                        "required": True,
-                        "type": "list",
-                        "nullable": True,
-                        "schema": {
-                            "type": "dict",
-                            "schema": {
-                                "principal": {
-                                    "type": "string",
-                                    "regex": "^(user:)([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+)\.([a-zA-Z0-9-.]+)$",
+    'source_uris_serving': {
+        'required': True,
+        'type': 'list',
+        'nullable': False,
+    },
+    'schema': {
+        'required': True,
+        'type': 'string',
+        'nullable': True
+    },
+    'csv_options': {
+        'required': False,
+        'type': 'dict',
+        'nullable': True,
+        'schema': {
+            "quote": {'required': True, 'type': 'string', 'nullable': True},
+            "allow_jagged_rows": {'required': True, 'type': 'boolean', 'nullable': True},
+            "allow_quoted_newlines": {'required': True, 'type': 'boolean', 'nullable': True},
+            "encoding": {'required': True, 'type': 'string', 'nullable': True},
+            "field_delimiter": {'required': True, 'type': 'string', 'nullable': True},
+            "skip_leading_rows": {'required': True, 'type': 'integer', 'nullable': True},
+        }
+    },
+    'gsheet_options': {
+        'required': False,
+        'type': 'dict',
+        'nullable': True,
+        'schema': {
+            "skip_leading_rows": {'required': True, 'type': 'integer', 'nullable': True},
+        }
+    },
+    'iam_binding': {
+        'required': True,
+        'type': 'dict',
+        'schema': {
+            'users': {
+                'required': True,
+                'type': 'dict',
+                'schema': {
+                    'subscribers': {
+                        'required': True,
+                        'type': 'list',
+                        'nullable': True,
+                        'schema': {
+                            'type': 'dict',
+                            'schema': {
+                                'principal': {
+                                    'type': 'string',
+                                    'regex': '^(user:)([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+)\.([a-zA-Z0-9-.]+)$'
                                 },
-                                "expiry": {
-                                    "type": "string",
-                                    "regex": "datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)",
-                                },
-                            },
-                        },
-                    }
-                },
-            },
-            "service_accounts": {
-                "required": True,
-                "type": "dict",
-                "schema": {
-                    "subscribers": {
-                        "required": True,
-                        "type": "list",
-                        "nullable": True,
-                        "schema": {
-                            "type": "dict",
-                            "schema": {
-                                "principal": {
-                                    "type": "string",
-                                    "regex": "^(serviceAccount:)([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+)\.([a-zA-Z0-9-.]+)$",
+                                'expiry': {
+                                    'type': 'string',
+                                    'regex': 'datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)'
                                 }
-                            },
-                        },
+                            }
+                        }
                     }
-                },
+                }
             },
-        },
-    },
+            'service_accounts': {
+                'required': True,
+                'type': 'dict',
+                'schema': {
+                    'subscribers': {
+                        'required': True,
+                        'type': 'list',
+                        'nullable': True,
+                        'schema': {
+                            'type': 'dict',
+                            'schema': {
+                                'principal': {
+                                    'type': 'string',
+                                    'regex': '^(serviceAccount:)([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+)\.([a-zA-Z0-9-.]+)$'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
