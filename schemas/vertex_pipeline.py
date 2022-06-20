@@ -60,6 +60,11 @@
         'type': 'dict',
         'nullable': True
     },
+    'gchat_webhook_list': {
+        'required': False,
+        'type': 'list',
+        'nullable': True
+    },    
     'iam_binding': {
         'required': True,
         'type': 'dict',

@@ -53,7 +53,8 @@
     'job_name': {
         'required': True,
         'type': 'string',
-        'nullable': False
+        'nullable': False,
+        'regex': '[-a-z0-9]+'
     },
     'schedule': {
         'required': True,
