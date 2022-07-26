@@ -43,6 +43,17 @@
         'type': 'string',
         'nullable': False
     },
+    'imported_libraries': {
+        'required': False,
+        'type': 'list',
+        'nullable': True
+    },
+    'determinism_level': {
+        'required': False,
+        'type': 'string',
+        'nullable': True,
+        'allowed': ['DETERMINISM_LEVEL_UNSPECIFIED', 'DETERMINISTIC', 'NOT_DETERMINISTIC']
+    },
     'return_type': {
         'required': True,
         'type': 'string',
