@@ -66,18 +66,11 @@
                         'required': True,
                         'type': 'list',
                         'nullable': True,
-                        'schema': {
-                            'type': 'dict',
-                            'schema': {
-                                'principal': {
-                                    'type': 'string', 'regex': '^(user:)([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+)\.([a-zA-Z0-9-.]+)$'
-                                },
-                                'expiry': {
-                                    'type': 'string',
-                                    'regex': 'datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)'
-                                }
-                            }
-                        }
+                        'schema': {'type': 'dict',
+                                   'schema': {
+                                       'principal': {'type': 'string', 'regex': '^(user:)([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+)\.([a-zA-Z0-9-.]+)$'},
+                                       'expiry': {'type': 'string', 'regex': 'datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)'}}
+                                   }
                     },
                     'publishers': {
                         'required': True,
@@ -132,7 +125,41 @@
                         }
                     },
                 }
-            }
+            },
+            'groups': {
+                'required': False,
+                'type': 'dict',
+                'schema': {
+                    'subscribers': {
+                        'required': False,
+                        'type': 'list',
+                        'nullable': True,
+                        'schema': {'type': 'dict',
+                                   'schema': {
+                                       'principal': {'type': 'string', 'regex': '^(group:)([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+)\.([a-zA-Z0-9-.]+)$'},
+                                       'expiry': {'type': 'string', 'regex': 'datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)'}}
+                                   }
+                    },
+                    'publishers': {
+                        'required': False,
+                        'type': 'list',
+                        'nullable': True,
+                        'schema': {
+                            'type': 'dict',
+                            'schema': {
+                                'principal': {
+                                    'type': 'string',
+                                    'regex': '^(group:)([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+)\.([a-zA-Z0-9-.]+)$'
+                                },
+                                'expiry': {
+                                    'type': 'string',
+                                    'regex': 'datetime\(\d{4},([1-9]|1[0-2]),([1-9]|[12][0-9]|3[01])\)'
+                                }
+                            }
+                        }
+                    }
+                }
+            },
         }
-    }
+    },
 }
