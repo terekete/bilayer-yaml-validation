@@ -135,7 +135,7 @@ def process(manifest_path):
             manifest_path,
             os.getcwd() + '/main/schemas/service_account.py'
         )
-    elif file_handler["kind"] == 'looker_conect':
+    elif file_handler["kind"] == 'looker_connect':
         validate_manifest(
             file_handler,
             manifest_path,
