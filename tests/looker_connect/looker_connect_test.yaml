@@ -1,0 +1,7 @@
+kind: looker_connect
+version: v1
+metadata:
+  dep: "tbd"
+resource_name: "wakame"
+p4sa_service_accounts:
+  - service-1091505442413@gcp-sa-looker.iam.gserviceaccount.com
