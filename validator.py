@@ -145,7 +145,7 @@ def process(manifest_path):
         validate_manifest(
             file_handler,
             manifest_path,
-            os.getcwd() + '/main/schemas/v1/external_connect.py'
+            os.getcwd() + '/main/schemas/external_connect.py'
         )
     else:
         logging.error(
