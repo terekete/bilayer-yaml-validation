@@ -141,6 +141,12 @@ def process(manifest_path):
             manifest_path,
             os.getcwd() + '/main/schemas/v1/looker_connect.py'
         )
+    elif file_handler["kind"] == 'extrenal_connectivty':
+        validate_manifest(
+            file_handler,
+            manifest_path,
+            os.getcwd() + '/main/schemas/v1/external_connect.py'
+        )
     else:
         logging.error(
             "*\t Error: Unknown manifest kind: {manifest_path}"
