@@ -1,0 +1,30 @@
+{
+  "allow_list": [
+	"pulumi:providers:gcp",
+	"pulumi:providers:google-native",
+	"pulumi:pulumi:Stack",
+	"google-native:storage/v1:Bucket",
+	"gcp:storage/bucket:Bucket",
+	"gcp:storage/bucketIAMMember:BucketIAMMember",
+	"google-native:storage/v1:BucketIamMember",
+	"google-native:bigquery/v2:Dataset",
+	"gcp:bigquery/dataset/Dataset",
+	"google-native:bigquery/v2:Table",
+	"google-native:bigquery/v2:Routine",
+	"gcp:bigquery/routine:Routine",
+	"google-native:bigquerydatatransfer/v1:TransferConfig",
+	"gcp:bigquery/dataTransferConfig:DataTransferConfig",
+	"google-native:workflows/v1:Workflow",
+	"gcp:workflows/Workflow",
+	"google-native:notebooks/v1:Schedule",
+	"google-native:monitoring/v3:NotificationChannel",
+	"google-native:monitoring/v3:AlertPolicy",
+	"random:index/randomUuid:RandomUuid",
+	"pulumi:providers:random",
+	"gcp:workflows/workflow:Workflow",
+	"gcp:bigquery/datasetIamMember:DatasetIamMember",
+	"google-native:bigquery/v2:TableIamMember",
+	"gcp:bigquery/iamMember:IamMember",
+	"gcp:logging/metric:Metric"
+  ]
+}
