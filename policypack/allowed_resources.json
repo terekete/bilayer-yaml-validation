@@ -26,6 +26,6 @@
 	"google-native:bigquery/v2:TableIamMember",
 	"gcp:bigquery/iamMember:IamMember",
 	"gcp:logging/metric:Metric",
-	"gcp:cloudscheduler/job:Job",
+	"gcp:cloudscheduler/job:Job"
   ]
 }
