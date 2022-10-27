@@ -70,16 +70,17 @@ bq_table_role = ResourceValidationPolicy(
     validate=bq_table_role_validator,
 )
 
-# below policy is to be reviewed and correted...
 def bq_resources_names_policy_validator(args: ResourceValidationArgs, report_violation: ReportViolation):
-    if "tableId" in args.props:
-        bq_object_nm = args.props["tableId"]
-        if not str(bq_object_nm).startswith("bq_"):
-            report_violation("BigQuery Object (Table/View) must start with ** bq_ **")
+    if args.resource_type in ["google-native:bigquery/v2:Table","gcp:bigquery/table:Table"]:
+        if "tableReference" in args.props:
+            if "tableId" in args.props["tableReference"]:
+                bq_object_nm = str(args.props["tableReference"]["tableId"])
+                if not str(bq_object_nm).startswith("bq_"):
+                    report_violation("BigQuery Object (Table/View) Name must start with ** bq_ ** keyword")
 
-bq_resource_names_policy = ResourceValidationPolicy(
-    name="bq-resource-names-policy",
-    description="BigQuery Object (Table/View) must start with ** bq_ **",
+bq_resources_names_policy = ResourceValidationPolicy(
+    name="bq-resources-names-policy",
+    description="Ensuring that BigQuery Object (Table/View) Name starts with ** bq_ ** keyword",
     validate=bq_resources_names_policy_validator,
 )
 
@@ -92,6 +93,6 @@ PolicyPack(
         resources_types_allow,
         bq_datatset_role,
         bq_table_role,
-        bq_resource_names_policy
+        bq_resources_names_policy
     ],
 )
