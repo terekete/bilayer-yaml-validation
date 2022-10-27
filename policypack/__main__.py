@@ -9,7 +9,6 @@ from pulumi_policy import (
 import json
 
 
-
 def storage_bucket_no_public_read_validator(args: ResourceValidationArgs, report_violation: ReportViolation):
     if args.resource_type == "gcp:storage/bucketACL:BucketACL" and "predefinedAcl" in args.props:
         acl = args.props["predefinedAcl"]
@@ -35,8 +34,6 @@ location = ResourceValidationPolicy(
 )
 
 json_data = json.load(open("allowed_resources.json"))
-
-
 
 def resources_types_allow_validator(args: ResourceValidationArgs, report_violation: ReportViolation):
     if args.resource_type not in json_data["allow_list"]:
@@ -73,6 +70,19 @@ bq_table_role = ResourceValidationPolicy(
     validate=bq_table_role_validator,
 )
 
+def bq_resources_names_policy_validator(args: ResourceValidationArgs, report_violation: ReportViolation):
+    if args.resource_type in ["google-native:bigquery/v2:Table","gcp:bigquery/table:Table"]:
+        if "tableReference" in args.props:
+            if "tableId" in args.props["tableReference"]:
+                bq_object_nm = str(args.props["tableReference"]["tableId"])
+                if not str(bq_object_nm).startswith("bq_"):
+                    report_violation("BigQuery Object (Table/View) Name must start with ** bq_ ** keyword")
+
+bq_resources_names_policy = ResourceValidationPolicy(
+    name="bq-resources-names-policy",
+    description="Ensuring that BigQuery Object (Table/View) Name starts with ** bq_ ** keyword",
+    validate=bq_resources_names_policy_validator,
+)
 
 PolicyPack(
     name="gcp-python",
@@ -82,6 +92,7 @@ PolicyPack(
         location,
         resources_types_allow,
         bq_datatset_role,
-        bq_table_role
+        bq_table_role,
+        bq_resources_names_policy
     ],
 )
