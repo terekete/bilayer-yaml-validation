@@ -27,6 +27,7 @@
 	"gcp:bigquery/iamMember:IamMember",
 	"gcp:logging/metric:Metric",
 	"gcp:cloudscheduler/job:Job",
-	"gcp:bigquery/table:Table"
+	"gcp:bigquery/table:Table",
+	"gcp:pubsub/topic:Topic"
   ]
 }
