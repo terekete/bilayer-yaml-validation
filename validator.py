@@ -141,7 +141,7 @@ def process(manifest_path):
             manifest_path,
             os.getcwd() + '/main/schemas/v1/looker_connect.py'
         )
-    elif file_handler["kind"] == 'extrenal_connectivty':
+    elif file_handler["kind"] == 'external_connectivty':
         validate_manifest(
             file_handler,
             manifest_path,

@@ -29,7 +29,7 @@
         'regex': '^[a-z](?:[-a-z0-9]{4,28}[a-z0-9])$'
     },
     'kubernetes_service_accounts': {
-        'required': True,
+        'required': False,
         'type': 'list',
         'nullable': False
     }
