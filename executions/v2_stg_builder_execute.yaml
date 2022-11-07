@@ -1,0 +1,234 @@
+on:
+  workflow_call:
+    inputs:
+      # pass in environment through manual trigger, if not passed in, default to 'dev'
+      PROJECT_ID:
+        required: true
+        type: string
+      GITHUB_NAME:
+        required: true
+        type: string
+
+jobs:
+  changed-files:
+    runs-on: ubuntu-latest
+    outputs:
+      cmatrix: ${{ steps.set-matrix-c.outputs.matrix }}
+      dmatrix: ${{ steps.set-matrix-d.outputs.matrix }}
+      changed: ${{ steps.changed-files.outputs.all_changed_files }}
+      deleted: ${{ steps.changed-files.outputs.deleted_files }}
+    permissions:
+      contents: "write"
+      pull-requests: "write"
+      id-token: "write"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # needed for tj-actions/changed-files
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v32
+        with:
+          json: true
+          files: |
+            /stacks/**/Pulumi.yaml
+      - name: List all changed files
+        run: |
+          echo ${{ steps.changed-files.outputs.all_changed_files }}
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file"
+          done
+      - id: set-matrix-c
+        run: echo "matrix={\"container\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
+      - id: set-matrix-d
+        run: echo "matrix={\"container\":${{ steps.changed-files.outputs.deleted_files }}}" >> "$GITHUB_OUTPUT"
+
+  matrix-job-d:
+    name: Cleanup
+    if: ${{ needs.changed-files.outputs.deleted != '[]' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "write"
+      pull-requests: "write"
+      id-token: "write"
+    needs: [changed-files]
+    strategy:
+      matrix: ${{ fromJSON(needs.changed-files.outputs.dmatrix) }}
+      max-parallel: 4
+      fail-fast: false
+    steps:
+      - name: Test
+        run: |
+          ls -la
+          echo ${{ matrix.container }}
+      - name: Authenticate to Google using WIF
+        id: auth
+        uses: google-github-actions/auth@v0
+        with:
+          workload_identity_provider: ${{ secrets.CDO_WORKLOAD_IDENTITY_PROVIDER_GCP }}
+          service_account: "cicd-service-account@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com"
+          project_id: ${{ inputs.PROJECT_ID }}
+          token_format: "access_token"
+      - id: 'secrets'
+        uses: 'google-github-actions/get-secretmanager-secrets@v0'
+        with:
+          secrets: |-
+            token:${{ inputs.PROJECT_ID }}/pulumi
+      - uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ inputs.PROJECT_ID }}
+          export_default_credentials: true
+      - name: "Pulumi"
+        run: |
+          # Stage the dependancies
+          curl -fsSL https://get.pulumi.com | sh
+          pulumi version
+          python --version
+          export current_date=`date +"%Y-%m-%d"`
+          pip install --upgrade pulumi-policy==1.4.0
+          pip install --upgrade yq==3.1.0
+          echo ${{ matrix.container }}
+          
+          # Action
+          export DIR="$(dirname "${{ matrix.container }}")"
+          echo "DIR ${DIR}"
+          export stack_name=${DIR##*/}
+          echo "stack_name ${stack_name}"
+          
+          # get the config file from gcs
+          gsutil cp gs://pulumi-state-${{ inputs.PROJECT_ID }}/${DIR}/config/Pulumi.yaml Pulumi.yaml
+
+          # cd ${DIR}
+          pulumi --non-interactive login gs://pulumi-state-${{ inputs.PROJECT_ID }}/${DIR}
+          pulumi --non-interactive stack select ${stack_name} --create
+          pulumi --non-interactive destroy --yes
+          # pulumi --non-interactive stack rm ${stack_name} --yes
+          # gsutil -m rm -r gs://pulumi-state-${{ inputs.PROJECT_ID }}/${DIR}/.pulumi/*
+        env:
+          PULUMI_CONFIG_PASSPHRASE : '${{ steps.secrets.outputs.token }}'
+
+  matrix-job-c:
+    name: Build
+    if: ${{ needs.changed-files.outputs.changed != '[]' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "write"
+      pull-requests: "write"
+      id-token: "write"
+    needs: [changed-files]
+    strategy:
+      matrix: ${{ fromJSON(needs.changed-files.outputs.cmatrix) }}
+      max-parallel: 4
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Checkout tools repo
+        uses: actions/checkout@v3
+        with:
+          repository: terekete/bilayer-yaml-validation
+          path: my-tools
+      - name: Test
+        run: |
+          ls -la
+          echo ${{ matrix.container }}
+      - name: Authenticate to Google using WIF
+        id: auth
+        uses: google-github-actions/auth@v0
+        with:
+          workload_identity_provider: ${{ secrets.CDO_WORKLOAD_IDENTITY_PROVIDER_GCP }}
+          service_account: "cicd-service-account@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com"
+          project_id: ${{ inputs.PROJECT_ID }}
+          token_format: "access_token"
+      - id: 'secrets'
+        uses: 'google-github-actions/get-secretmanager-secrets@v0'
+        with:
+          secrets: |-
+            token:${{ inputs.PROJECT_ID }}/pulumi
+      - uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ inputs.PROJECT_ID }}
+          export_default_credentials: true
+      - name: "Pulumi"
+        run: |
+          # Stage the dependancies
+          curl -fsSL https://get.pulumi.com | sh
+          pulumi version
+          python --version
+          export current_date=`date +"%Y-%m-%d"`
+          pip install --upgrade pulumi-policy==1.4.0
+          pip install --upgrade yq==3.1.0
+          echo ${{ matrix.container }}
+          
+          # Build
+
+          export DIR="$(dirname "${{ matrix.container }}")"
+          echo "DIR ${DIR}"
+          export stack_name=${DIR##*/}
+          echo "stack_name ${stack_name}"
+          # cd to actions dir
+          cd ${DIR}
+          # Get dates
+          
+          export staging_expiry_date=$(yq -r .configuration.staging_expiry.default Pulumi.yaml)
+          echo staging_expiry: ${staging_expiry_date}
+          echo current_date: ${current_date}
+          # Check if file is empty
+          if [ -s Pulumi.yaml ]; then
+            echo Pulumi yaml not empty
+          else
+            echo Pulumi yaml empty
+            exit 125
+          fi
+          # Check if file is commented out
+          export payload=$(yq -r . Pulumi.yaml)
+          if [ -z "${payload}" ]; then
+            echo Pulumi yaml is commented out
+            exit 125
+          fi
+          # Check if the staging expiry value exists
+          if test -z "${staging_expiry_date}"
+          then
+            echo staging_expiry missing in the configuration section of the Pulumi yaml 
+            exit 125
+          else
+            echo "$staging_expiry_date"
+          fi
+          #Actions
+          if [[ ${staging_expiry_date} =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] && date -d ${staging_expiry_date}
+          then
+            pulumi --non-interactive login gs://pulumi-state-${{ inputs.PROJECT_ID }}/${DIR}
+            pulumi --non-interactive stack select ${stack_name} --create
+            pulumi --non-interactive config set project ${{ inputs.PROJECT_ID }}
+            pulumi --non-interactive config set builder cicd-service-account@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com
+            pulumi --non-interactive refresh --yes
+            if [[ ${current_date} < $staging_expiry_date ]]
+            then
+                echo stack not expired
+                # pulumi --non-interactive preview --policy-pack '/home/runner/work/${{ inputs.GITHUB_NAME }}/${{ inputs.GITHUB_NAME }}/my-tools/policypack'
+                # Run the local policy pack if it exists
+                if test -f "/home/runner/work/${{ inputs.GITHUB_NAME }}/${{ inputs.GITHUB_NAME }}/localPolicyPack/PulumiPolicy.yaml"
+                then
+                  echo local policy detected
+                  pulumi --non-interactive preview --policy-pack '/home/runner/work/${{ inputs.GITHUB_NAME }}/${{ inputs.GITHUB_NAME }}/localPolicyPack'
+                fi
+                pulumi --non-interactive up --yes
+
+                # push the file to gcs
+                gsutil cp Pulumi.yaml gs://pulumi-state-${{ inputs.PROJECT_ID }}/${DIR}/config/Pulumi.yaml
+            else
+                echo stack expired
+                # if the stack is expired, the stack is destroyed and the dir removed. 
+                pulumi --non-interactive destroy --yes
+                # pulumi --non-interactive stack rm ${stack_name} --yes
+                # gsutil -m rm -r gs://pulumi-state-${{ inputs.PROJECT_ID }}/${DIR}/*
+            fi
+          else
+              echo Invalid date format. Date format must be: YYYY-MM-DD
+              exit 125
+          fi
+        env:
+          PULUMI_CONFIG_PASSPHRASE : '${{ steps.secrets.outputs.token }}'
