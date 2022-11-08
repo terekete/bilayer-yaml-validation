@@ -8,6 +8,9 @@ on:
       GITHUB_NAME:
         required: true
         type: string
+    secrets:
+      CDO_WORKLOAD_IDENTITY_PROVIDER_GCP:
+        required: true
 jobs:
   changed-files:
     runs-on: ubuntu-latest
