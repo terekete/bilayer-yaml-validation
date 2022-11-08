@@ -49,7 +49,7 @@ jobs:
         uses: google-github-actions/auth@v0
         with:
           workload_identity_provider: ${{ secrets.CDO_WORKLOAD_IDENTITY_PROVIDER_GCP }}
-          service_account: "cicd-service-account@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com"
+          service_account: "cicd-sa@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com"
           project_id: ${{ inputs.PROJECT_ID }}
           token_format: "access_token"
       - id: 'secrets'
