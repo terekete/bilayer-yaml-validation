@@ -135,6 +135,8 @@ jobs:
         run: |
           ls -la
           echo ${{ matrix.container }}
+          echo wif provider
+          echo ${{ secrets.CDO_WORKLOAD_IDENTITY_PROVIDER_GCP }}
       - name: Authenticate to Google using WIF
         id: auth
         uses: google-github-actions/auth@v0
