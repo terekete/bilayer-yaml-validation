@@ -85,7 +85,7 @@ jobs:
           export_default_credentials: true
       - name: "sync"
         run: |
-          hash=$(echo -n ${PROJECT_ID} | sha256sum | cut -c1-4)
+          hash=$(echo -n ${{ inputs.PROJECT_ID }} | sha256sum | cut -c1-4)
           echo $hash
           echo ${{ matrix.container }}
           export DIR="$(dirname "${{ matrix.container }}")"
@@ -128,7 +128,7 @@ jobs:
           export_default_credentials: true
       - name: "sync"
         run: |
-          hash=$(echo -n ${PROJECT_ID} | sha256sum | cut -c1-4)
+          hash=$(echo -n ${{ inputs.PROJECT_ID }} | sha256sum | cut -c1-4)
           echo $hash
           echo ${{ matrix.container }}
           export DIR="$(dirname "${{ matrix.container }}")"
