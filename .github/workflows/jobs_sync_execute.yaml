@@ -35,7 +35,7 @@ jobs:
         with:
           json: true
           files: |
-            /stacks/**/src/dataflows/**/*.py
+            /stacks/**/src/dataflow/**/*.py
       - id: set-matrix-dataflow
         run: echo "matrix={\"container\":${{ steps.changed-files-dataflow.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
       # Spark
