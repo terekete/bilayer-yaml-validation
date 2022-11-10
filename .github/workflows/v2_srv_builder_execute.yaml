@@ -157,6 +157,7 @@ jobs:
           python --version
           export current_date=`date +"%Y-%m-%d"`
           pip install --upgrade pulumi-policy==1.4.0
+          pip install --upgrade protobuf==4.21.1
           export DIR="$(dirname "${{ matrix.container }}")"
           echo "DIR ${DIR}"
           export stack_name=${DIR##*/}

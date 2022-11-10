@@ -165,6 +165,7 @@ jobs:
           export current_date=`date +"%Y-%m-%d"`
           pip install --upgrade pulumi-policy==1.4.0
           pip install --upgrade yq==3.1.0
+          pip install --upgrade protobuf==4.21.1
           echo ${{ matrix.container }}
           
           # Build
