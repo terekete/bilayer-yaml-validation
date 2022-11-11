@@ -32,6 +32,12 @@ jobs:
           json: true
           files: |
             /resources/**/*.yaml
+      - name: List all changed files
+        run: |
+          echo ${{ steps.changed-files.outputs.all_modified_files }}
+          for file in ${{ steps.changed-files.outputs.all_modified_files }}; do
+            echo "$file"
+          done
   Build:
     name: Build
     if: ${{ needs.changed-files.outputs.ifmodified != '[]' }}
