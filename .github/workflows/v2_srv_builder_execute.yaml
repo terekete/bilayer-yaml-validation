@@ -188,7 +188,7 @@ jobs:
           #Actions
           pulumi --non-interactive stack select ${stack_name} --create
           pulumi --non-interactive config set project ${{ inputs.PROJECT_ID }}
-          pulumi --non-interactive config set builder cicd-service-account@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com
+          pulumi --non-interactive config set builder cicd-sa@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com
           pulumi --non-interactive refresh --yes
           pulumi --non-interactive preview --policy-pack '/home/runner/work/${{ inputs.GITHUB_NAME }}/${{ inputs.GITHUB_NAME }}/my-tools/policypack'
           # Run the local policy pack if it exists

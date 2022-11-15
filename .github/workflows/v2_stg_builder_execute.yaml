@@ -208,7 +208,7 @@ jobs:
             pulumi --non-interactive login gs://pulumi-state-${{ inputs.PROJECT_ID }}/${DIR}
             pulumi --non-interactive stack select ${stack_name} --create
             pulumi --non-interactive config set project ${{ inputs.PROJECT_ID }}
-            pulumi --non-interactive config set builder cicd-service-account@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com
+            pulumi --non-interactive config set builder cicd-sa@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com
             pulumi --non-interactive refresh --yes
             if [[ ${current_date} < $staging_expiry_date ]]
             then
