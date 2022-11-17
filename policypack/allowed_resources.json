@@ -28,6 +28,7 @@
 	"gcp:cloudscheduler/job:Job",
 	"gcp:bigquery/table:Table",
 	"gcp:pubsub/topic:Topic",
-	"gcp:eventarc/trigger:Trigger"
+	"gcp:eventarc/trigger:Trigger",
+	"gcp:storage/notification:Notification"
   ]
 }
