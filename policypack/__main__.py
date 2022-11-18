@@ -84,6 +84,18 @@ bq_resources_names_policy = ResourceValidationPolicy(
     validate=bq_resources_names_policy_validator,
 )
 
+def agentSA(args: ResourceValidationArgs, report_violation: ReportViolation):
+    if args.resource_type in ["gcp:projects/iamMember:IamMember"]:
+        role=str(args.props["role"])
+        if role not in ["roles/pubsub.publisher"]:
+            report_violation("Only roles/pubsub.publisher can be added to sa binding")
+
+agentSA_policy = ResourceValidationPolicy(
+    name="agentSA",
+    description="Only roles/pubsub.publisher can be added to sa binding",
+    validate=agentSA,
+)
+
 PolicyPack(
     name="gcp-python",
     enforcement_level=EnforcementLevel.MANDATORY,
@@ -93,6 +105,7 @@ PolicyPack(
         resources_types_allow,
         bq_datatset_role,
         bq_table_role,
-        bq_resources_names_policy
+        bq_resources_names_policy,
+        agentSA_policy
     ],
 )

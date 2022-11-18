@@ -209,6 +209,11 @@ jobs:
             pulumi --non-interactive stack select ${stack_name} --create
             pulumi --non-interactive config set project ${{ inputs.PROJECT_ID }}
             pulumi --non-interactive config set builder cicd-sa@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com
+
+            # get service agent id
+            SERVICE_ACCOUNT="$(gsutil kms serviceaccount -p ${{ inputs.PROJECT_ID }})"
+            echo ${SERVICE_ACCOUNT}
+            pulumi --non-interactive config set serviceSA ${SERVICE_ACCOUNT}
             pulumi --non-interactive refresh --yes
             if [[ ${current_date} < $staging_expiry_date ]]
             then

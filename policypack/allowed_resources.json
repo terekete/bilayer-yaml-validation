@@ -29,6 +29,7 @@
 	"gcp:bigquery/table:Table",
 	"gcp:pubsub/topic:Topic",
 	"gcp:eventarc/trigger:Trigger",
-	"gcp:storage/notification:Notification"
+	"gcp:storage/notification:Notification",
+	"gcp:projects/iamMember:IamMember"
   ]
 }
