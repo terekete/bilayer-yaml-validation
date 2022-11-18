@@ -218,7 +218,7 @@ jobs:
             if [[ ${current_date} < $staging_expiry_date ]]
             then
                 echo stack not expired
-                # pulumi --non-interactive preview --policy-pack '/home/runner/work/${{ inputs.GITHUB_NAME }}/${{ inputs.GITHUB_NAME }}/my-tools/policypack'
+                pulumi --non-interactive preview --policy-pack '/home/runner/work/${{ inputs.GITHUB_NAME }}/${{ inputs.GITHUB_NAME }}/my-tools/policypack'
                 # Run the local policy pack if it exists
                 if test -f "/home/runner/work/${{ inputs.GITHUB_NAME }}/${{ inputs.GITHUB_NAME }}/localPolicyPack/PulumiPolicy.yaml"
                 then
