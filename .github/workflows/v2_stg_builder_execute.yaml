@@ -210,10 +210,16 @@ jobs:
             pulumi --non-interactive config set project ${{ inputs.PROJECT_ID }}
             pulumi --non-interactive config set builder cicd-sa@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com
 
-            # get service agent id
+            # get service agent id and pass it as variable
             SERVICE_ACCOUNT="$(gsutil kms serviceaccount -p ${{ inputs.PROJECT_ID }})"
             echo ${SERVICE_ACCOUNT}
             pulumi --non-interactive config set serviceSA ${SERVICE_ACCOUNT}
+
+            # get project id sha and pass it as variable
+            hash=$(echo -n ${{ inputs.PROJECT_ID }} | sha256sum | cut -c1-4)
+            echo ${hash}
+            pulumi --non-interactive config set PROJECT_ID_SHA ${hash}
+
             pulumi --non-interactive refresh --yes
             if [[ ${current_date} < $staging_expiry_date ]]
             then
