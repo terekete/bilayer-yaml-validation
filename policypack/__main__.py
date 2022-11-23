@@ -85,7 +85,7 @@ bq_resources_names_policy = ResourceValidationPolicy(
 )
 
 def agentSA(args: ResourceValidationArgs, report_violation: ReportViolation):
-    if args.resource_type in ["gcp:projects/iamMember:IamMember"]:
+    if args.resource_type in ["gcp:projects/iAMMember:IAMMember"]:
         role=str(args.props["role"])
         if role not in ["roles/pubsub.publisher", "roles/cloudscheduler.admin", "roles/bigquery.jobUser"]:
             report_violation("Only roles/pubsub.publisher can be added to sa binding")

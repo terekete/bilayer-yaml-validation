@@ -30,6 +30,6 @@
 	"gcp:pubsub/topic:Topic",
 	"gcp:eventarc/trigger:Trigger",
 	"gcp:storage/notification:Notification",
-	"gcp:projects/iamMember:IamMember"
+	"gcp:projects/iAMMember:IAMMember"
   ]
 }
