@@ -96,6 +96,17 @@ agentSA_policy = ResourceValidationPolicy(
     validate=agentSA,
 )
 
+def deny_dataset_owner_role(args: ResourceValidationArgs, report_violation: ReportViolation):
+    if args.resource_type in ["gcp:bigquery/datasetAccess:DatasetAccess"]:
+        if "access" in args.props:
+            report_violation("Dataset iam member must be set from gcp:bigquery/datasetIamMember:DatasetIamMember or gcp:bigquery/datasetAccess:DatasetAccess")
+
+deny_dataset_owner_role_policy = ResourceValidationPolicy(
+    name="deny_dataset_owner_role",
+    description="Dataset iam member must be set from gcp:bigquery/datasetIamMember:DatasetIamMember or gcp:bigquery/datasetAccess:DatasetAccess",
+    validate=deny_dataset_owner_role,
+)
+
 PolicyPack(
     name="gcp-python",
     enforcement_level=EnforcementLevel.MANDATORY,
@@ -106,6 +117,7 @@ PolicyPack(
         bq_datatset_role,
         bq_table_role,
         bq_resources_names_policy,
-        agentSA_policy
+        agentSA_policy,
+        deny_dataset_owner_role_policy
     ],
 )
