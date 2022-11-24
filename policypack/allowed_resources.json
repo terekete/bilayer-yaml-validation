@@ -30,6 +30,7 @@
 	"gcp:pubsub/topic:Topic",
 	"gcp:eventarc/trigger:Trigger",
 	"gcp:storage/notification:Notification",
-	"gcp:projects/iAMMember:IAMMember"
+	"gcp:projects/iAMMember:IAMMember",
+	"gcp:bigquery/datasetAccess:DatasetAccess"
   ]
 }
