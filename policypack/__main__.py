@@ -97,7 +97,7 @@ agentSA_policy = ResourceValidationPolicy(
 )
 
 def deny_dataset_owner_role(args: ResourceValidationArgs, report_violation: ReportViolation):
-    if args.resource_type in ["gcp:bigquery/datasetAccess:DatasetAccess"]:
+    if args.resource_type in ["gcp:bigquery/dataset:Dataset", "google-native:bigquery/v2:Dataset"]:
         if "accesses" in args.props:
             report_violation("Dataset iam member must be set from gcp:bigquery/datasetIamMember:DatasetIamMember or gcp:bigquery/datasetAccess:DatasetAccess")
 
