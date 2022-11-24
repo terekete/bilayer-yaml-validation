@@ -96,14 +96,27 @@ agentSA_policy = ResourceValidationPolicy(
     validate=agentSA,
 )
 
-def deny_dataset_owner_role(args: ResourceValidationArgs, report_violation: ReportViolation):
+def deny_dataset_owner_from_accesses_role(args: ResourceValidationArgs, report_violation: ReportViolation):
     if args.resource_type in ["gcp:bigquery/dataset:Dataset", "google-native:bigquery/v2:Dataset"]:
         if "accesses" in args.props:
             report_violation("Dataset iam member must be set from gcp:bigquery/datasetIamMember:DatasetIamMember or gcp:bigquery/datasetAccess:DatasetAccess")
 
+deny_dataset_owner_from_accesses_role_policy = ResourceValidationPolicy(
+    name="deny_dataset_owner_from_accesses_role",
+    description="Dataset iam member must be set from gcp:bigquery/datasetIamMember:DatasetIamMember or gcp:bigquery/datasetAccess:DatasetAccess",
+    validate=deny_dataset_owner_from_accesses_role,
+)
+
+def deny_dataset_owner_role(args: ResourceValidationArgs, report_violation: ReportViolation):
+    if args.resource_type in ["gcp:bigquery/datasetAccess:DatasetAccess"]:
+        if "role" in args.props:
+            role = args.props["role"]
+            if role != "READER": 
+                report_violation("ONLY READER is allowed on Dataset access")
+
 deny_dataset_owner_role_policy = ResourceValidationPolicy(
     name="deny_dataset_owner_role",
-    description="Dataset iam member must be set from gcp:bigquery/datasetIamMember:DatasetIamMember or gcp:bigquery/datasetAccess:DatasetAccess",
+    description="ONLY READER is allowed on Dataset access",
     validate=deny_dataset_owner_role,
 )
 
@@ -118,6 +131,7 @@ PolicyPack(
         bq_table_role,
         bq_resources_names_policy,
         agentSA_policy,
+        deny_dataset_owner_from_accesses_role_policy,
         deny_dataset_owner_role_policy
     ],
 )
