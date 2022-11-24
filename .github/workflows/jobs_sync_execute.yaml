@@ -90,7 +90,7 @@ jobs:
           echo ${{ matrix.container }}
           export DIR="$(dirname "${{ matrix.container }}")"
           echo "DIR ${DIR}"
-          gsutil -m rsync -r -c ./${DIR} gs://dataflow-scripts-${hash}/${DIR}
+          gsutil -m rsync -r -c ./${DIR} gs://dataflow-scripts-${hash}/dataflow_jobs/${DIR}
 
   matrix-job-spark:
     name: Sync Spark
@@ -133,4 +133,4 @@ jobs:
           echo ${{ matrix.container }}
           export DIR="$(dirname "${{ matrix.container }}")"
           echo "DIR ${DIR}"
-          gsutil -m rsync -r -c ./${DIR} gs://spark-scripts-${hash}/${DIR}
+          gsutil -m rsync -r -c ./${DIR} gs://spark-scripts-${hash}/pyspark_jobs/${DIR}
