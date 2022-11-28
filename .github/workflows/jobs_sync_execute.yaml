@@ -79,7 +79,7 @@ jobs:
         uses: google-github-actions/auth@v0
         with:
           workload_identity_provider: ${{ secrets.CDO_WORKLOAD_IDENTITY_PROVIDER_GCP }}
-          service_account: ${{ inputs.CICD_SA }
+          service_account: ${{ inputs.CICD_SA }}
           project_id: ${{ inputs.PROJECT_ID }}
           token_format: "access_token"
       - uses: google-github-actions/setup-gcloud@v0
