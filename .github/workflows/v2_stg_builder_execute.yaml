@@ -8,6 +8,9 @@ on:
       GITHUB_NAME:
         required: true
         type: string
+      CICD_SA:
+        required: true
+        type: string
     secrets:
       CDO_WORKLOAD_IDENTITY_PROVIDER_GCP:
         required: true
@@ -69,7 +72,7 @@ jobs:
         uses: google-github-actions/auth@v0
         with:
           workload_identity_provider: ${{ secrets.CDO_WORKLOAD_IDENTITY_PROVIDER_GCP }}
-          service_account: "cicd-sa@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com"
+          service_account: ${{ inputs.CICD_SA }}
           project_id: ${{ inputs.PROJECT_ID }}
           token_format: "access_token"
       - id: 'secrets'
@@ -144,7 +147,7 @@ jobs:
         uses: google-github-actions/auth@v0
         with:
           workload_identity_provider: ${{ secrets.CDO_WORKLOAD_IDENTITY_PROVIDER_GCP }}
-          service_account: "cicd-sa@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com"
+          service_account: ${{ inputs.CICD_SA }}
           project_id: ${{ inputs.PROJECT_ID }}
           token_format: "access_token"
       - id: 'secrets'
@@ -208,7 +211,7 @@ jobs:
             pulumi --non-interactive login gs://pulumi-state-${{ inputs.PROJECT_ID }}/${DIR}
             pulumi --non-interactive stack select ${stack_name} --create
             pulumi --non-interactive config set project ${{ inputs.PROJECT_ID }}
-            pulumi --non-interactive config set builder cicd-sa@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com
+            pulumi --non-interactive config set builder ${{ inputs.CICD_SA }}
 
             # get service agent id and pass it as variable
             SERVICE_ACCOUNT="$(gsutil kms serviceaccount -p ${{ inputs.PROJECT_ID }})"
