@@ -24,7 +24,7 @@ storage_bucket_no_public_read = ResourceValidationPolicy(
 def location_validator(args: ResourceValidationArgs, report_violation: ReportViolation):
     if "location" in args.props:
         location = args.props["location"]
-        if location != "northamerica-northeast1":
+        if location not in ["northamerica-northeast1", "global"]:
             report_violation("Resource location must be set to northamerica-northeast1")
 
 location = ResourceValidationPolicy(
