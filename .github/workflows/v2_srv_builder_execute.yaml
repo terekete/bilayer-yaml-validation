@@ -192,6 +192,17 @@ jobs:
           pulumi --non-interactive stack select ${stack_name} --create
           pulumi --non-interactive config set project ${{ inputs.PROJECT_ID }}
           pulumi --non-interactive config set builder ${{ inputs.CICD_SA }}
+
+          # get service agent id and pass it as variable
+          service_account="$(gsutil kms serviceaccount -p ${{ inputs.PROJECT_ID }})"
+          echo ${service_account}
+          pulumi --non-interactive config set service_agent ${service_account}
+
+          # get project id sha and pass it as variable
+          hash=$(echo -n ${{ inputs.PROJECT_ID }} | sha256sum | cut -c1-4)
+          echo ${hash}
+          pulumi --non-interactive config set project_sha ${hash}
+            
           pulumi --non-interactive refresh --yes
           pulumi --non-interactive preview --policy-pack '/home/runner/work/${{ inputs.GITHUB_NAME }}/${{ inputs.GITHUB_NAME }}/my-tools/policypack'
           # Run the local policy pack if it exists
