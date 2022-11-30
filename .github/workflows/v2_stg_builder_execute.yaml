@@ -221,7 +221,8 @@ jobs:
             # get project id sha and pass it as variable
             hash=$(echo -n ${{ inputs.PROJECT_ID }} | sha256sum | cut -c1-4)
             echo "HASH:" ${hash}
-            declare -- hash_string=${hash}
+            declare -- hash_string=${hash}+'A'
+            
             pulumi --non-interactive config set project_sha "${hash_string}"
 
             pulumi --non-interactive refresh --yes
