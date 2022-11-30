@@ -181,7 +181,7 @@ jobs:
           cd ${DIR}
           # Get dates
           
-          export staging_expiry_date=$(yq -r .configuration.staging_expiry.default Pulumi.yaml)
+          export staging_expiry_date=$(yq -r .config.staging_expiry.default Pulumi.yaml)
           echo staging_expiry: ${staging_expiry_date}
           echo current_date: ${current_date}
           # Check if file is empty
@@ -200,7 +200,7 @@ jobs:
           # Check if the staging expiry value exists
           if test -z "${staging_expiry_date}"
           then
-            echo staging_expiry missing in the configuration section of the Pulumi yaml 
+            echo staging_expiry missing in the config section of the Pulumi yaml 
             exit 125
           else
             echo "$staging_expiry_date"
@@ -215,13 +215,13 @@ jobs:
 
             # get service agent id and pass it as variable
             service_account="$(gsutil kms serviceaccount -p ${{ inputs.PROJECT_ID }})"
-            echo ${service_account}
+            echo "SERVICE AGENT:" ${service_account}
             pulumi --non-interactive config set service_agent ${service_account}
 
             # get project id sha and pass it as variable
             hash=$(echo -n ${{ inputs.PROJECT_ID }} | sha256sum | cut -c1-4)
-            echo ${hash}
-            pulumi --non-interactive config set project_sha ${hash}
+            echo "HASH:" ${hash}
+            pulumi --non-interactive config set project_sha "${hash}"
 
             pulumi --non-interactive refresh --yes
             if [[ ${current_date} < $staging_expiry_date ]]
