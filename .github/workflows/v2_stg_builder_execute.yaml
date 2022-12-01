@@ -181,7 +181,7 @@ jobs:
           cd ${DIR}
           # Get dates
           
-          export staging_expiry_date=$(yq -r .config.staging_expiry.default Pulumi.yaml)
+          export staging_expiry_date=$(yq -r .configuration.staging_expiry.default Pulumi.yaml)
           echo staging_expiry: ${staging_expiry_date}
           echo current_date: ${current_date}
           # Check if file is empty
