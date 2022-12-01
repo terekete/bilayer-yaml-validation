@@ -196,7 +196,7 @@ jobs:
           # get service agent id and pass it as variable
           service_account="$(gsutil kms serviceaccount -p ${{ inputs.PROJECT_ID }})"
           echo ${service_account}
-          pulumi --non-interactive config set service_agent ${service_account}
+          pulumi --non-interactive config set gcs_agent ${service_account}
 
           # get project id sha and pass it as variable
           hash=$(echo -n ${{ inputs.PROJECT_ID }} | sha256sum | cut -c1-4)
