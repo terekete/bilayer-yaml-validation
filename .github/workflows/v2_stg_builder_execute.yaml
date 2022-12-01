@@ -224,7 +224,8 @@ jobs:
             declare -- hash_string=${hash}+'A'
             echo "HASHSTRING:" ${hash_string}
             # pulumi --non-interactive config set project_sha "${hash_string}"
-            pulumi --non-interactive config set project_sha "123"+""
+            # pulumi --non-interactive config set project_sha "123"+""
+            pulumi --non-interactive config set project_sha ${hash}+""
 
             pulumi --non-interactive refresh --yes
             if [[ ${current_date} < $staging_expiry_date ]]
