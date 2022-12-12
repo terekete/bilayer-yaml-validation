@@ -61,7 +61,7 @@ jobs:
           json: true
           files: |
             /stacks/**/src/notebook/**/*.ipynb
-      - id: set-matrix-spark
+      - id: set-matrix-notebooks
         run: echo "matrix={\"container\":${{ steps.changed-files-notebooks.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
 
   matrix-job-dataflow:
